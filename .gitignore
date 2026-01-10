@@ -7,9 +7,11 @@ __pycache__/
 python/config/.env
 
 # Generated data (keep repo light)
-data/raw/
-data/clean/
-data/rejects/
+data/raw/*.csv
+data/clean/*.csv
+data/rejects/*.csv
+data/reference/*.csv
+!data/**/.gitkeep
 
 # Power BI
 *.pbix
