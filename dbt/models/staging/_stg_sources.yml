@@ -1,0 +1,73 @@
+version: 2
+
+sources:
+  - name: bronze
+    database: "{{ target.database }}"
+    schema: BRONZE
+    tables:
+      - name: FUND_MASTER
+        columns:
+          - name: RUN_ID
+          - name: SOURCE_SYSTEM
+          - name: FUND_ID
+          - name: FUND_NAME
+          - name: BASE_CURRENCY
+          - name: INCEPTION_DATE
+          - name: ACCOUNTING_BASIS
+          - name: RAW_FILE_NAME
+          - name: LOADED_AT
+      - name: FX_RATES
+        columns:
+          - name: RUN_ID
+          - name: SOURCE_SYSTEM
+          - name: FX_DATE
+          - name: FROM_CCY
+          - name: TO_CCY
+          - name: FX_RATE
+          - name: RAW_FILE_NAME
+          - name: LOADED_AT
+      - name: PRICE_TIMESERIES
+        columns:
+          - name: RUN_ID
+          - name: SOURCE_SYSTEM
+          - name: PRICE_DATE
+          - name: ASSET_ID
+          - name: PRICE
+          - name: PRICE_CCY
+          - name: RAW_FILE_NAME
+          - name: LOADED_AT
+      - name: SECURITY_MASTER
+        columns:
+          - name: RUN_ID
+          - name: SOURCE_SYSTEM
+          - name: ASSET_ID
+          - name: ASSET_TYPE
+          - name: CURRENCY
+          - name: ID_ISIN
+          - name: ISSUE_DATE
+          - name: MATURITY_DATE
+          - name: TICKER
+          - name: COUPON_RATE
+          - name: PAY_FREQ
+          - name: DAY_COUNT
+          - name: RESET_FREQUENCY
+          - name: INDEX_NAME
+          - name: UNDERLYING
+          - name: STRIKE
+          - name: RAW_FILE_NAME
+          - name: LOADED_AT
+      - name: TRADE
+        columns:
+          - name: RUN_ID
+          - name: SOURCE_SYSTEM
+          - name: SOURCE_TXN_ID
+          - name: FUND_ID
+          - name: ASSET_ID
+          - name: TXN_TYPE
+          - name: TXN_DATE
+          - name: SETTLE_DATE
+          - name: QUANTITY
+          - name: PRICE
+          - name: CURRENCY
+          - name: RAW_FILE_NAME
+          - name: LOADED_AT

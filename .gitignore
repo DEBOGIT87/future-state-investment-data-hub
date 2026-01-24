@@ -5,12 +5,18 @@ __pycache__/
 
 # Secrets
 python/config/.env
+**/.env
+**/.env.*
+
+# Logs
+*.log
 
 # Generated data (keep repo light)
 data/raw/*.csv
 data/clean/*.csv
 data/rejects/*.csv
 data/reference/*.csv
+data/exports/*.csv
 !data/**/.gitkeep
 
 # Power BI
@@ -20,3 +26,21 @@ powerbi/pbix/
 # OS
 Thumbs.db
 .DS_Store
+
+# -------------------------------
+# Local execution artifacts (do not commit)
+# -------------------------------
+
+# dbt / DuckDB local files
+dbt/logs/
+dbt/target/
+dbt/dbt_packages/
+dbt/duckdb/*.duckdb
+dbt/duckdb/*.wal
+
+# Snowflake CLI / local config (if you add later)
+**/.snowsql/
+**/.snowsql**
+
+# Draw.io backups
+*backup.drawio

@@ -1,0 +1,5 @@
+BREAK_CATEGORY,DESCRIPTION,DEFAULT_SEVERITY,EXAMPLE
+timing,Date cutover or late-arriving feed causes temporary variance,med,Trade on T not in downstream on T (appears on T+1)
+rounding,Small variance due to rounding/precision differences,low,FX conversion differs at 6 vs 8 decimals
+data,Missing or invalid reference or attribute causes mismatch or rejects,high,Missing FX rate for currency pair/date
+logic,Different business rules or derivations between systems,high,Transaction type mapped differently leading to sign flip

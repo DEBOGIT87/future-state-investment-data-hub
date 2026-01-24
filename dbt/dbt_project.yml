@@ -1,0 +1,36 @@
+﻿name: investment_data_hub
+version: "1.0.0"
+config-version: 2
+
+profile: investment_data_hub
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+test-paths: ["tests"]
+macro-paths: ["macros"]
+
+target-path: "target"
+clean-targets: ["target", "dbt_packages", "logs"]
+
+vars:
+  raw_dir: "../data/raw"
+  run_id: ""   # pass at runtime: --vars '{"run_id":"20260118_201244_c80818"}'
+
+models:
+  investment_data_hub:
+    staging:
+      +materialized: view
+      +schema: ODS
+    ods:
+      +materialized: table
+      +schema: ODS
+    recon:
+      +materialized: view
+      +schema: CONTROL
+    control:
+      +materialized: view
+      +schema: CONTROL
+
+seeds:
+  investment_data_hub:
+    +schema: CONTROL
