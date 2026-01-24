@@ -41,3 +41,6 @@ dbt/duckdb/*.wal
 # Snowflake CLI / local config (if you add later)
 **/.snowsql/
 **/.snowsql**
+
+# Draw.io backups
+*backup.drawio
