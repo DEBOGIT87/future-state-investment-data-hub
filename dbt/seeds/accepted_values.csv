@@ -1,0 +1,6 @@
+DOMAIN,VALUE
+severity,low
+severity,med
+severity,high
+txn_type,BUY
+txn_type,SELL

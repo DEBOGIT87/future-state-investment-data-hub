@@ -1,0 +1,47 @@
+﻿-- =====================================================================
+-- Idempotent MERGE patterns (BRONZE -> ODS)
+-- Key idea:
+--  - compute RECORD_HASH from business columns
+--  - MERGE on business key
+--  - UPDATE only when RECORD_HASH changes
+-- =====================================================================
+
+-- Example: ODS.FUND from BRONZE.FUND_MASTER
+-- MERGE INTO ODS.FUND tgt
+-- USING (
+--   SELECT
+--     RUN_ID,
+--     SOURCE_SYSTEM,
+--     FUND_ID,
+--     FUND_NAME,
+--     BASE_CURRENCY,
+--     TRY_TO_DATE(INCEPTION_DATE) AS INCEPTION_DATE,
+--     ACCOUNTING_BASIS,
+--     SHA2(
+--       CONCAT_WS('|',
+--         COALESCE(SOURCE_SYSTEM,''),
+--         COALESCE(FUND_ID,''),
+--         COALESCE(FUND_NAME,''),
+--         COALESCE(BASE_CURRENCY,''),
+--         COALESCE(INCEPTION_DATE,''),
+--         COALESCE(ACCOUNTING_BASIS,'')
+--       ), 256
+--     ) AS RECORD_HASH
+--   FROM BRONZE.FUND_MASTER
+-- ) src
+-- ON tgt.SOURCE_SYSTEM = src.SOURCE_SYSTEM
+-- AND tgt.FUND_ID = src.FUND_ID
+-- WHEN MATCHED AND tgt.RECORD_HASH <> src.RECORD_HASH THEN
+--   UPDATE SET
+--     tgt.RUN_ID = src.RUN_ID,
+--     tgt.FUND_NAME = src.FUND_NAME,
+--     tgt.BASE_CURRENCY = src.BASE_CURRENCY,
+--     tgt.INCEPTION_DATE = src.INCEPTION_DATE,
+--     tgt.ACCOUNTING_BASIS = src.ACCOUNTING_BASIS,
+--     tgt.RECORD_HASH = src.RECORD_HASH,
+--     tgt.LOADED_AT = CURRENT_TIMESTAMP()
+-- WHEN NOT MATCHED THEN
+--   INSERT (RUN_ID, SOURCE_SYSTEM, FUND_ID, FUND_NAME, BASE_CURRENCY, INCEPTION_DATE, ACCOUNTING_BASIS, RECORD_HASH, LOADED_AT)
+--   VALUES (src.RUN_ID, src.SOURCE_SYSTEM, src.FUND_ID, src.FUND_NAME, src.BASE_CURRENCY, src.INCEPTION_DATE, src.ACCOUNTING_BASIS, src.RECORD_HASH, CURRENT_TIMESTAMP());
+
+-- Repeat for ASSET, ASSET_PRICE, FX_RATE, TRADE.

@@ -1,0 +1,23 @@
+﻿-- =====================================================================
+-- COPY INTO patterns (BRONZE landing)
+-- Requires: BRONZE.RAW_CSV_STAGE + BRONZE.CSV_FF
+-- Demo upload example:
+--   PUT file://G:/Work/Skillwealth/Master_Project/data/raw/*.csv @BRONZE.RAW_CSV_STAGE AUTO_COMPRESS=TRUE;
+-- =====================================================================
+
+-- Template example for one dataset (repeat per dataset):
+-- COPY INTO BRONZE.FUND_MASTER
+-- FROM (
+--   SELECT
+--     t.$1::STRING  AS RUN_ID,
+--     t.$2::STRING  AS SOURCE_SYSTEM,
+--     ...
+--     METADATA$FILENAME AS RAW_FILE_NAME,
+--     CURRENT_TIMESTAMP() AS LOADED_AT
+--   FROM @BRONZE.RAW_CSV_STAGE/fund_master_extract_<RUN_ID>.csv t
+-- )
+-- FILE_FORMAT = (FORMAT_NAME = BRONZE.CSV_FF)
+-- ON_ERROR = 'CONTINUE';
+
+-- NOTE:
+-- For a program-grade approach, we also write CONTROL.FILE_MANIFEST and CONTROL.LOAD_AUDIT.
