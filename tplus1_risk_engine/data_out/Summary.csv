@@ -1,0 +1,4 @@
+﻿ROOT_CAUSE,RISK_FLAG,TRADE_COUNT
+Missing FX Rate for Trade Date,AMBER,7879
+Settlement Latency Breach (3 Days),RED,2051
+Settlement Latency Breach (2 Days),RED,1949

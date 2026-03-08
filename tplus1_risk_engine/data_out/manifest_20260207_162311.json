@@ -1,0 +1,12 @@
+{
+  "generated_at": "20260207_162311",
+  "seed": 87,
+  "rows_trades": 50000,
+  "rows_fx": 186,
+  "rows_holidays": 15,
+  "files": {
+    "trades": "trades_tplus1_20260207_162311.csv",
+    "fx_rates": "fx_rates_20260207_162311.csv",
+    "holiday_calendar": "holiday_calendar_20260207_162311.csv"
+  }
+}
