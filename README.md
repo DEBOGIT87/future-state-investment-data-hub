@@ -7,6 +7,19 @@ This project simulates a real-world operational challenge faced by asset manager
 All data used in this repository is synthetic and generated for demonstration purposes.
 
 ---
+# What This Repository Demonstrates
+
+This repository is intended to demonstrate practical capability in several areas that are highly relevant to modern investment operations environments:
+
+• designing data quality control frameworks for investment data  
+• structuring canonical data models for downstream controls and analytics  
+• identifying operational risk signals related to T+1 settlement readiness  
+• generating evidence-pack style outputs for stakeholder review  
+• connecting data validation workflows to operational monitoring dashboards  
+
+The objective is not to reproduce a full production platform, but to show how investment operations, data architecture, and control design can be combined into a practical diagnostic framework.
+
+---
 
 # The Real-World Problem
 
