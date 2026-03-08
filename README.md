@@ -1,119 +1,277 @@
-# Future-State Investment Data Hub (NDA-safe)
+# Investment Data Quality & T+1 Settlement Risk Diagnostic (NDA-Safe Demo)
 
-## What this repository is
-A practical, vendor-agnostic migration framework for moving investment accounting data from legacy platforms into a modern analytics stack, with controls designed to protect NAV, income, and cash integrity.
+A practical, vendor-neutral framework demonstrating how investment operations teams can detect data integrity issues before T+1 settlement using Python validation, a canonical investment data model, and operational evidence packs.
 
-**Migration programs typically fail for predictable reasons:**
-- Historical data arrives with gaps and inconsistencies (dates, identifiers, terms, currencies).
-- Teams lift vendor schemas "as-is" instead of establishing a clean standard.
-- Reconciliation is treated as a late-stage activity rather than an engineered control.
+This project simulates a real-world operational challenge faced by asset managers and fund administrators: identifying data quality issues early enough to avoid settlement failures, NAV discrepancies, operational incidents, and costly investigations.
 
-**This project follows a safer sequence:** Validate → Standardize → Reconcile → Report.
+All data used in this repository is synthetic and generated for demonstration purposes.
 
 ---
 
-## Design Principles
+# The Real-World Problem
 
-* **Accounting integrity first:** Data movement is not "successful" unless NAV, income, and cash behavior is explainable and reconcilable.
-* **Canonical over vendor:** Normalize into a stable, business-friendly canonical model instead of perpetuating source-system layouts.
-* **Early validation:** Run finance-aware checks *before* loading to the warehouse, so bad records are separated as rejects and don't create NAV/income breaks later.
-* **Repeatable runs with audit trail:** you can rerun the pipeline without creating duplicates, and each run generates a clear record of what was accepted vs rejected and why.
-* **Parallel run done properly:** When running old and new systems together, breaks are tracked with categories (timing/rounding/logic), trends, and owners—so it’s controlled, not panic-driven.
+Modern investment operations teams must manage data flowing from many systems:
 
----
+• legacy investment accounting platforms
+• trading systems
+• market data feeds (prices / FX)
+• reference data systems (security master, fund master)
+• external CSV or Excel extracts
 
-## Phases and What They Achieve
+Before settlement deadlines (especially under **T+1 settlement cycles**), operations teams must verify that this data is complete, consistent, and accurate.
 
-### Phase 0 — Canonical Blueprint (Architecture-First)
-**Objective:** Define a universal canonical model so any source system (vendor export, internal platform, spreadsheets) maps into the same target structure.
+Common operational risks include:
 
-* **Deliverables:**
-    * Draw.io blueprint of the full flow (Sources → Quality Gate → Canonical ODS → Reconciliation + Dashboards).
-    * High-level Source-to-Canonical mapping notes (vendor-neutral).
-* **Value:** Creates a consistent "common language," reduces ambiguity, and keeps the target model stable even when source systems change.
+• trades missing FX rates
+• price mismatches between trade price and market price
+• incomplete security master data
+• settlement date issues
+• reconciliation breaks between positions and pricing
 
-### Phase 1 — Smart Ingestion Gate (Completed)
-**Objective:** Prevent "poison data" from entering the warehouse and causing downstream breaks.
+When these issues are detected too late, they can cause:
 
-* **What it does:**
-    * Produces realistic legacy-style extracts (synthetic, vendor-neutral columns).
-    * Applies finance-aware validation rules (date logic, required terms, type checks, master-data consistency).
-    * Splits outputs into **Clean** vs **Rejects** and produces a quality summary report.
-* **Value:** Moves migration risk left. Issues are surfaced early with clear categorization and counts, before they become NAV/income breaks.
+• failed settlements
+• incorrect NAV calculations
+• operational incidents
+• manual investigations and escalations
 
-### Phase 2 — Canonical ODS in Snowflake (Next)
-**Objective:** Load validated data into a clean, queryable Operational Data Store aligned to the canonical model.
+Many firms still rely on fragmented manual checks across spreadsheets, internal tools, and legacy systems.
 
-* **Deliverables:**
-    * Snowflake DDL for core canonical tables.
-    * Idempotent loading patterns (repeatable loads without duplicates).
-    * Basic data contract expectations (keys, types, required fields).
-* **Value:** Provides a stable foundation for analytics and downstream marts, and supports repeatable migrations from multiple sources.
-
-### Phase 3 — Dual-Run Reconciliation Engine (Next)
-**Objective:** Compare Legacy vs Target results and explain breaks in a structured way.
-
-* **Deliverables:**
-    * dbt tests/models for NAV, income, and cash checks.
-    * Variance taxonomy: Timing vs Rounding vs Mapping/Logic Defect.
-    * Break reports that support daily triage during parallel run.
-* **Value:** Makes parallel run measurable and operational, reducing cutover risk and accelerating convergence.
-
-### Phase 4 — Finance Marts (Next)
-**Objective:** Build reporting-friendly star schemas for performance and usability.
-
-* **Deliverables:**
-    * Facts and dimensions designed for Finance/Ops consumption.
-    * Optimized views for BI tools and spreadsheet consumers.
-* **Value:** Improves usability and reduces reliance on engineering teams for standard reporting and investigation.
-
-### Phase 5 — Ops Command Center (Next)
-**Objective:** Provide operational visibility into migration health and exception patterns.
-
-* **Deliverables:**
-    * Power BI dashboards (quality heatmaps, break trends, migration progress).
-    * Operational monitoring patterns (exception buckets, timeliness views).
-* **Value:** Converts technical migration signals into an operational view that stakeholders can monitor and act on.
+This project demonstrates how a **diagnostic control framework** could be implemented to detect such issues earlier and provide structured evidence for operations teams.
 
 ---
 
-## How to Run Phase 1 Locally
+# Why This Matters Now
 
-**1. Generate sample legacy extracts**
-python .\python\scripts\01_generate_legacy_data.py
+Many financial markets have recently transitioned from **T+2 to T+1 settlement cycles**, significantly reducing the time available for investment operations teams to detect and resolve data issues.
 
-**1. Run the Quality Gate**
-python .\python\scripts\02_quality_gate.py
+Under T+1 timelines, problems in pricing data, FX rates, trade details, or reference data must be identified much earlier in the trade lifecycle.
 
-Outputs (generated locally, not committed):
-•	data/raw/ — Synthetic legacy-style extracts.
-•	data/clean/ — Validated datasets ready for loading.
-•	data/rejects/ — Rejected rows plus quality_summary_<RUN_ID>.csv.
-________________________________________
-Demo and Educational Use Only
-This repository is provided for demonstration and educational purposes only. It is not production software and is not a substitute for platform/vendor documentation, internal controls, or formal implementation governance. Do not use this repository with real client or employer data.
-NDA and IP Safety Note
-This repository is NDA-safe by design:
-•	All datasets are synthetic and generated locally (no client, employer, or vendor data).
-•	Structures use generic, vendor-neutral naming (no proprietary schemas, table names, or client mappings).
-•	The implementation demonstrates reusable migration patterns (validation, standardization, reconciliation controls) applicable across platforms.
-•	Any mention of vendor platforms is for context only. This codebase does not reproduce, disclose, or derive from proprietary vendor or client implementations.
-Intended Use
-This repository is a hands-on demonstration of:
-•	Legacy data remediation and quality gating.
-•	Canonical modeling for investment data.
-•	Reconciliation controls for parallel run and cutover readiness.
-•	Operational reporting patterns for migration governance.
-________________________________________
-How this is done in Real Programs (High Level)
-In real migrations, this pattern typically sits inside a governed delivery model:
-•	Source extracts are controlled (access, approvals, audit trail).
-•	Rule catalogs are agreed with Finance/Ops and tracked (change control).
-•	Reconciliations run on a defined cadence (daily/weekly), with break ownership and SLAs.
-•	Parallel run (“dual run”) continues until break trends converge and cutover criteria are met.
-•	Artifacts (rules, mappings, test evidence) are retained for audit/compliance as required.
-________________________________________
-Contact
-You can reach me at: debonotes1@gmail.com
-Note: Please do not upload or submit confidential datasets, proprietary schemas, or client identifiers into issues, pull requests, or discussions.
+If these issues remain undetected, firms may face:
 
+• settlement failures  
+• incorrect NAV calculations  
+• operational escalations  
+• regulatory scrutiny  
+
+This shift toward faster settlement cycles is forcing many firms to rethink how they validate and monitor operational data.
+
+The diagnostic framework demonstrated in this repository illustrates how a lightweight validation and control layer could help operations teams detect issues earlier and improve settlement readiness.
+
+
+
+---
+# What This Demo Shows
+
+This repository simulates a simplified investment data control framework that:
+
+1. Validates raw investment data extracts
+2. Identifies data integrity issues
+3. Classifies breaks using a rule catalog
+4. Produces an operational evidence pack
+5. Visualizes operational risk in a dashboard
+
+The goal is to demonstrate how a lightweight diagnostic layer could sit between legacy systems and modern data platforms.
+
+---
+
+# High-Level Architecture
+
+The system follows a simple but realistic control flow:
+
+```
+Legacy Systems / Market Data
+        │
+        ▼
+Python Quality Gate
+(validation and reject logic)
+        │
+        ▼
+Bronze Landing / Raw Staging
+        │
+        ▼
+Canonical Investment Data Model
+(Snowflake-ready ODS design)
+        │
+        ▼
+Control & Reconciliation Rules
+        │
+        ▼
+Evidence Pack Outputs
+        │
+        ▼
+Operational Monitoring (Power BI)
+```
+
+A detailed architecture diagram will be included in:
+
+```
+docs/architecture/
+```
+
+---
+
+# Example Diagnostic Checks
+
+The demo includes simplified control rules such as:
+
+### Price Variance Check
+
+Detects when trade price deviates significantly from market price.
+
+### Missing FX Check
+
+Identifies trades where FX rates are missing for the trade date.
+
+### Settlement Risk Check
+
+Flags trades that could be at risk under T+1 settlement timelines.
+
+### Reference Data Completeness
+
+Checks whether required security master fields are populated.
+
+These checks simulate the types of operational controls used by investment operations and data management teams.
+
+---
+
+# Evidence Pack Outputs
+
+The diagnostic engine generates structured outputs such as:
+
+```
+Summary.csv
+AUDIT_EVIDENCE_PACK_TPLUS1_SAMPLE.csv
+breaks_with_taxonomy.csv
+recon_nav_like.csv
+```
+
+These outputs summarize:
+
+• break type
+• root cause classification
+• severity level
+• suggested operational action
+
+This type of evidence pack allows operations teams to quickly identify and triage issues.
+
+---
+
+# Power BI Operational Cockpit
+
+The repository also includes a Power BI dashboard that visualizes:
+
+• break trends
+• root cause distribution
+• settlement risk indicators
+• operational workload
+
+The dashboard simulates how an operations control center might monitor daily data health.
+
+Dashboard assets are located in:
+
+```
+powerbi/
+```
+
+---
+
+# Repository Structure
+
+```
+data/
+    Sample data extracts and generated outputs
+
+python/
+    Validation logic and diagnostic scripts
+
+snowflake/
+    Canonical investment data model (ODS schema)
+
+dbt/
+    Reconciliation and transformation logic
+
+tplus1_risk_engine/
+    Synthetic T+1 settlement risk simulation
+
+powerbi/
+    Operational monitoring dashboard
+
+docs/
+    Architecture and documentation
+```
+
+---
+
+# Technology Stack
+
+This demonstration uses a simple but realistic stack commonly seen in modern data platforms:
+
+• Python
+• SQL / Snowflake data modeling
+• dbt transformation logic
+• DuckDB for lightweight analytics
+• Power BI for operational dashboards
+
+---
+
+# NDA-Safe Demonstration
+
+This project intentionally uses:
+
+• synthetic datasets
+• generated extracts
+• simplified control rules
+
+No client data, proprietary systems, or confidential logic are included.
+
+The goal is purely educational and demonstrative.
+
+---
+
+# Who This Is For
+
+This demo may be useful for professionals interested in:
+
+• investment operations modernization
+• data quality frameworks
+• migration from legacy investment systems
+• operational control dashboards
+• Snowflake-based data architectures
+
+---
+
+# Future Enhancements
+
+Possible extensions include:
+
+• automated rule catalogs
+• anomaly detection using machine learning
+• AI-assisted break explanations
+• automated evidence pack generation
+• workflow integration with ticketing systems
+
+---
+# Related Operational Challenges
+
+While this demo focuses on settlement readiness and T+1 risk,
+similar data validation frameworks are often used for:
+
+• NAV validation and fund accounting controls  
+• data migration from legacy investment systems  
+• reference data governance  
+• reconciliation between accounting and market data platforms  
+• operational data quality monitoring  
+
+These types of control layers are commonly implemented when
+modernizing investment operations platforms or migrating data
+to cloud-based data warehouses.
+
+---
+
+# Author
+
+Debojyoti Sarkar
+Investment Operations & Data Architecture
+
+This project is part of an independent exploration of modern data control frameworks for investment operations.
