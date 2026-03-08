@@ -88,6 +88,24 @@ The goal is to demonstrate how a lightweight diagnostic layer could sit between 
 
 ---
 
+# Client Workflow
+
+A typical usage flow for this framework is:
+
+Client sends masked operational extracts  
+↓  
+Python diagnostic validates source data  
+↓  
+Control rules identify breaks and risk signals  
+↓  
+Evidence pack summarizes issues and actions  
+↓  
+Power BI highlights operational priorities
+
+In practice, this means a client can provide masked trade, market data, and reference data extracts, and quickly receive a structured view of potential settlement-risk or reconciliation issues before they become downstream operational problems.
+
+---
+
 # High-Level Architecture
 
 The system follows a simple but realistic control flow:
