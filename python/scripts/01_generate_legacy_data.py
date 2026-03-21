@@ -221,7 +221,7 @@ def gen_trades(funds: pd.DataFrame, secs: pd.DataFrame, n: int) -> pd.DataFrame:
     start = CFG["start_date"]
     end = CFG["end_date"]
     all_days = pd.date_range(start, end, freq="B").date
-    month_end_days = pd.date_range(start, end, freq="BM").date
+    month_end_days = pd.date_range(start, end, freq="BME").date
 
     rows = []
     for i in range(n):
@@ -236,7 +236,7 @@ def gen_trades(funds: pd.DataFrame, secs: pd.DataFrame, n: int) -> pd.DataFrame:
         settle_date = (pd.to_datetime(txn_date) + pd.to_timedelta(lag, unit="D")).date()
 
         qty = round(float(np.random.uniform(10, 10000)), 4)
-        price = round(float(np.random.uniform(5, 500)), 6)
+        price = f"{round(float(np.random.uniform(5, 500)), 6):.6f}"
 
         rows.append({
             "RUN_ID": RUN_ID,
