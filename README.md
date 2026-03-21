@@ -231,6 +231,21 @@ powerbi/
 docs/
     Architecture and documentation
 ```
+---
+### Data Layer (Synthetic Inputs & Test Harness)
+
+The `data/` directory contains synthetic datasets generated to simulate real-world investment operations data flows.
+
+These datasets are intentionally designed to include controlled data quality issues ("poison pills") such as:
+
+• missing FX rates  
+• invalid security attributes  
+• settlement inconsistencies  
+• price gaps  
+
+This allows the diagnostic framework to demonstrate how data quality issues are detected and classified in a realistic operational context.
+
+This approach ensures the project remains NDA-safe while still reflecting real-world challenges.
 
 ---
 
