@@ -107,6 +107,7 @@ In practice, this means a client can provide masked trade, market data, and refe
 ---
 
 # High-Level Architecture
+![Architecture Diagram](docs/diagram/tplus1_settlement_risk_architecture.png)
 
 The system follows a simple but realistic control flow:
 
