@@ -191,20 +191,11 @@ This type of evidence pack allows operations teams to quickly identify and triag
 
 # Power BI Operational Cockpit
 
-The repository also includes a Power BI dashboard that visualizes:
+The repository includes a Power BI Operational Cockpit that visualizes break trends, root cause distribution, settlement risk indicators, and operational workload — simulating how an investment operations control centre monitors daily data health.
 
-• break trends
-• root cause distribution
-• settlement risk indicators
-• operational workload
+![Power BI Operational Cockpit](docs/powerbi_dashboard_sample.png)
 
-The dashboard simulates how an operations control center might monitor daily data health.
-
-Dashboard assets are located in:
-
-```
-powerbi/
-```
+The dashboard is designed to give operations teams a single-screen view of data quality status across the settlement lifecycle.
 
 ---
 
